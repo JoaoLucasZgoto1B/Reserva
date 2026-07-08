@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ---------- scroll reveal ---------- */
   const revealTargets = document.querySelectorAll(
-    ".pillar, .benefit, .problema-grid p, .map-panel, .call-strip, .steps li, .cta-box"
+    ".quadrados, .benefit, .problema-grid p, .map-panel, .call-strip, .steps li, .cta-box"
   );
   revealTargets.forEach(el => el.classList.add("reveal"));
 
