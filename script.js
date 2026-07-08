@@ -1,96 +1,73 @@
+// ===========================================================
+// MIP — Manejo Integrado de Pragas
+// ===========================================================
 
-// ============================================================
-// Mobile nav toggle
-// ============================================================
-const navToggle = document.getElementById('navToggle');
-const mobileNav = document.getElementById('main-nav-mobile');
- 
-if (navToggle && mobileNav) {
-  navToggle.addEventListener('click', () => {
-    const isOpen = mobileNav.classList.toggle('open');
-    navToggle.setAttribute('aria-expanded', String(isOpen));
-  });
- 
-  mobileNav.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      mobileNav.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* ---------- mobile nav ---------- */
+  const navToggle = document.getElementById("navToggle");
+  const mainNav = document.getElementById("mainNav");
+
+  if (navToggle && mainNav) {
+    navToggle.addEventListener("click", () => {
+      const isOpen = mainNav.classList.toggle("open");
+      navToggle.setAttribute("aria-expanded", String(isOpen));
     });
-  });
-}
- 
-// ============================================================
-// Economic threshold simulator
-// Zones: 0-35 equilibrio | 35-70 alerta | 70-100 dano economico
-// ============================================================
-const slider = document.getElementById('pestSlider');
-const needle = document.getElementById('gaugeNeedle');
-const statusEl = document.getElementById('readoutStatus');
-const textEl = document.getElementById('readoutText');
-const readoutBox = document.getElementById('simulatorReadout');
- 
-const ZONES = {
-  equilibrio: {
-    max: 35,
-    color: 'var(--leaf)',
-    label: 'Nível de equilíbrio',
-    text: 'A população está abaixo do limiar de ação. Nenhuma intervenção é necessária — continue monitorando semanalmente.'
-  },
-  alerta: {
-    max: 70,
-    color: 'var(--gold)',
-    label: 'Nível de alerta',
-    text: 'A população está subindo. Ainda não é hora de aplicar — reforce o monitoramento e observe a presença de inimigos naturais na área.'
-  },
-  dano: {
-    max: 100,
-    color: 'var(--ladybug)',
-    label: 'Nível de dano econômico — ação necessária',
-    text: 'A população cruzou o limiar em que o prejuízo supera o custo do controle. Este é o momento de intervir, escolhendo o método mais adequado à praga monitorada.'
+
+    mainNav.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        mainNav.classList.remove("open");
+        navToggle.setAttribute("aria-expanded", "false");
+      });
+    });
   }
-};
- 
-function updateSimulator() {
-  const value = Number(slider.value);
-  needle.style.left = value + '%';
- 
-  let zone;
-  if (value < ZONES.equilibrio.max) zone = ZONES.equilibrio;
-  else if (value < ZONES.alerta.max) zone = ZONES.alerta;
-  else zone = ZONES.dano;
- 
-  statusEl.textContent = zone.label;
-  statusEl.style.color = zone.color;
-  textEl.textContent = zone.text;
-  readoutBox.style.borderLeftColor = zone.color;
-}
- 
-if (slider) {
-  slider.addEventListener('input', updateSimulator);
-  updateSimulator();
-}
- 
-// ============================================================
-// Reveal sections on scroll
-// ============================================================
-const revealTargets = document.querySelectorAll('.pillar, .benefit-card, .map-figure, .map-analysis, .steps li');
- 
-if ('IntersectionObserver' in window && revealTargets.length) {
-  revealTargets.forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(16px)';
-    el.style.transition = 'opacity .6s ease, transform .6s ease';
-  });
- 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-        observer.unobserve(entry.target);
+
+  /* ---------- scroll reveal ---------- */
+  const revealTargets = document.querySelectorAll(
+    ".pillar, .benefit, .problema-grid p, .map-panel, .call-strip, .steps li, .cta-box"
+  );
+  revealTargets.forEach(el => el.classList.add("reveal"));
+
+  const io = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+  revealTargets.forEach(el => io.observe(el));
+
+  /* ---------- interactive map legend ---------- */
+  const regionNotes = {
+    noroeste: "<strong>Noroeste:</strong> concentra um número expressivo de municípios com MIP em curso, formando um dos blocos mais contínuos do mapa — mas ainda cercado de vizinhos sem cor.",
+    norte: "<strong>Norte:</strong> é a região com a maior mancha colorida do estado, sinal de que a prática ganhou escala onde recebeu mais apoio técnico contínuo.",
+    oeste: "<strong>Oeste:</strong> mostra adoção espalhada em bolsões, intercalada com áreas brancas — um padrão de avanço desigual dentro da mesma região produtora.",
+    sudoeste: "<strong>Sudoeste:</strong> apresenta uma mancha compacta e bem definida, mostrando que, quando a articulação entre produtores é forte, o manejo se espalha rápido pelos municípios vizinhos.",
+    sul: "<strong>Sul:</strong> tem municípios com MIP dispersos por uma área grande, mas com muitos vazios entre eles — a região que mais evidencia o tanto de território ainda descoberto."
+  };
+
+  const legendChips = document.querySelectorAll(".legend-chip");
+  const regionNote = document.getElementById("regionNote");
+  const defaultNote = regionNote ? regionNote.innerHTML : "";
+
+  legendChips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      const alreadyActive = chip.classList.contains("active");
+      legendChips.forEach(c => c.classList.remove("active"));
+
+      if (alreadyActive) {
+        regionNote.innerHTML = defaultNote;
+        return;
       }
+
+      chip.classList.add("active");
+      const region = chip.getAttribute("data-region");
+      regionNote.innerHTML = `<p>${regionNotes[region] || ""}</p>`;
     });
-  }, { threshold: 0.15 });
- 
-  revealTargets.forEach(el => observer.observe(el));
-}
+  });
+
+});
