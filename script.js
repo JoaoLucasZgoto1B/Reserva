@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   const revealTargets = document.querySelectorAll(
-    ".quadrados, .benefit, .problema-grid p, .map-panel, .call-strip, .steps li, .cta-box"
+    ".quadrados, .benefit, .problema-grid p, .map-panel, .call-strip, .steps li"
   );
   revealTargets.forEach(el => el.classList.add("reveal"));
 
