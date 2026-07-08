@@ -1,10 +1,7 @@
-// ===========================================================
-// MIP — Manejo Integrado de Pragas
-// ===========================================================
+
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ---------- mobile nav ---------- */
   const navToggle = document.getElementById("navToggle");
   const mainNav = document.getElementById("mainNav");
 
@@ -22,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ---------- scroll reveal ---------- */
+
   const revealTargets = document.querySelectorAll(
     ".quadrados, .benefit, .problema-grid p, .map-panel, .call-strip, .steps li, .cta-box"
   );
@@ -41,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   revealTargets.forEach(el => io.observe(el));
 
-  /* ---------- interactive map legend ---------- */
+ 
   const regionNotes = {
     noroeste: "<strong>Noroeste:</strong> concentra um número expressivo de municípios com MIP em curso, formando um dos blocos mais contínuos do mapa — mas ainda cercado de vizinhos sem cor.",
     norte: "<strong>Norte:</strong> é a região com a maior mancha colorida do estado, sinal de que a prática ganhou escala onde recebeu mais apoio técnico contínuo.",
