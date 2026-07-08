@@ -46,7 +46,7 @@ a{color:inherit;}
   backdrop-filter:blur(8px);
   border-bottom:1px solid rgba(31,54,32,.12);
 }
-.header-inner{
+.cabeçalho{
   display:flex;align-items:center;justify-content:space-between;
   padding-top:12px;padding-bottom:12px;
 }
